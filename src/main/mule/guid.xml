@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="05469ff4-b1b1-4cce-b0ba-a63da9135731" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="password" database="psk" />
+	</db:config>
+	<flow name="guidFlow" doc:id="3e1b73cf-d111-4baa-bf1b-ebd2a68a06ae" >
+		<db:listener doc:name="On Table Row" doc:id="e6053111-a3d6-47a3-a4a4-f93940583f99" config-ref="Database_Config" table="airtel_customers" watermarkColumn="cust_id">
+			<scheduling-strategy >
+				<fixed-frequency frequency="10" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</db:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="e4e1bc6e-2885-4189-a307-ca580e223f4f" message="#[payload]"/>
+	</flow>
+</mule>
