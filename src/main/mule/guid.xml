@@ -15,13 +15,28 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</scheduling-strategy>
 		</db:listener>
 		<logger level="INFO" doc:name="Logger" doc:id="e4e1bc6e-2885-4189-a307-ca580e223f4f" message="#[payload]"/>
-		<ee:transform doc:name="Transform Message" doc:id="6f2c0fb4-afb0-49bb-a3df-65c31eb0c82e" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<choice doc:name="Choice" doc:id="fca5fd4f-62b0-4c6a-8aa7-2badf1643fa2" >
+			<when expression="#[sizeOf(payload.cust_id &gt;=10)]">
+				<ee:transform doc:name="Transform Message" doc:id="6f2c0fb4-afb0-49bb-a3df-65c31eb0c82e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="a9b38056-c4bd-4818-b9d8-5eda169b6a9a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
 	</flow>
 </mule>
